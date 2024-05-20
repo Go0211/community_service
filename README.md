@@ -11,7 +11,7 @@
 # ERD
 
 <div style="width:100%;">
-    <img src="./erd.jpg" alt="erd" style="width: 80%; display: block; margin: 0 auto;">
+    <img src="./erd.JPG" alt="erd" style="width: 80%; display: block; margin: 0 auto;">
 </div>
 
 # Skill Stack
