@@ -1,5 +1,6 @@
 package com.community.zerobase.entity;
 
+import com.community.zerobase.dto.PostDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -58,4 +59,9 @@ public class Post {
 
   @Column(name = "modification_date")
   LocalDateTime modificationDate;
+
+  public void updatePost(PostDto.Request request) {
+    this.title = request.getTitle();
+    this.content = request.getContent();
+  }
 }

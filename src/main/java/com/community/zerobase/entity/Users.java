@@ -1,5 +1,6 @@
 package com.community.zerobase.entity;
 
+import com.community.zerobase.dto.UsersDto;
 import com.community.zerobase.role.Dormant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,12 +24,12 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "user")
-public class Users {
+@Table(name = "users")
+public class Users{
   @PrePersist
   protected void onCreated() {
     joinDate = LocalDateTime.now();
-    loginDate = LocalDateTime.now();
+    lastLoginDate = LocalDateTime.now();
     modificationDate = LocalDateTime.now();
     dormant = Dormant.N;
   }
@@ -55,8 +56,8 @@ public class Users {
   @Column(name = "join_date")
   LocalDateTime joinDate;
 
-  @Column(name = "login_date")
-  LocalDateTime loginDate;
+  @Column(name = "last_login_date")
+  LocalDateTime lastLoginDate;
 
   @Column(name = "modification_date")
   LocalDateTime modificationDate;
@@ -64,5 +65,15 @@ public class Users {
   @Column(name = "dormant")
   @Enumerated(value = EnumType.STRING)
   Dormant dormant;
+
+  public static Users joinDtotoToUsers(UsersDto.Join joinDto) {
+    return Users.builder()
+        .email(joinDto.getEmail())
+        .password(joinDto.getPassword())
+        .name(joinDto.getName())
+        .birthDate(joinDto.getBirthDate())
+        .phoneNumber(joinDto.getPhoneNumber())
+        .build();
+  }
 }
 
