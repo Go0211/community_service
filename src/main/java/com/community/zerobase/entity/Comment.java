@@ -1,5 +1,6 @@
 package com.community.zerobase.entity;
 
+import com.community.zerobase.dto.CommentDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,7 +39,7 @@ public class Comment {
   Users users;
 
   @ManyToOne
-  NoticeBoard noticeBoard;
+  Post post;
 
   @Column(name = "content")
   String content;
@@ -51,4 +52,9 @@ public class Comment {
 
   @Column(name = "modification_date")
   LocalDateTime modificationDate;
+
+  public void updateComment(CommentDto.Request request) {
+    this.content = request.getContent();
+    this.modificationDate = LocalDateTime.now();
+  }
 }

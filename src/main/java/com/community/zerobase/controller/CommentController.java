@@ -1,9 +1,8 @@
 package com.community.zerobase.controller;
 
-import com.community.zerobase.dto.PostDto;
+import com.community.zerobase.dto.CommentDto;
 import com.community.zerobase.service.AuthService;
-import com.community.zerobase.service.PostService;
-import jakarta.validation.Valid;
+import com.community.zerobase.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -20,55 +19,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/board/{boardId}/post")
 @RestController
 @RequiredArgsConstructor
-public class PostController {
-  private final PostService postService;
+@RequestMapping("/board/{boardId}/comment")
+public class CommentController {
   private final AuthService authService;
+  private final CommentService commentService;
 
   @GetMapping("/list")
-  public ResponseEntity<?> getNoticeBoard(
-      @RequestParam(name = "searchText", defaultValue = "") String searchText,
+  public ResponseEntity<?> getCommentList(
+      @RequestParam(name = "postId") Long postId,
       @PathVariable(name = "boardId") Long boardId,
       @PageableDefault(
           page = 0, size = 10, sort = "writeDate",
           direction = Direction.DESC)
       Pageable pageable
   ) {
-    return ResponseEntity.ok(postService.getPostList(pageable, searchText, boardId));
-  }
-
-  @GetMapping
-  public ResponseEntity<?> getPost(
-      @RequestParam(name = "postId") Long postId,
-      @PathVariable(name = "boardId") Long boardId) {
-    return ResponseEntity.ok(
-        postService.getPostData(boardId, postId));
+    return ResponseEntity.ok(commentService.getCommentListUsePost(pageable, boardId, postId));
   }
 
   @PostMapping
-  public ResponseEntity<?> writePost(
-      @Valid @RequestBody PostDto.Request request,
-      @PathVariable(name = "boardId") Long boardId) {
+  public ResponseEntity<?> writeComment(
+      @RequestParam(name = "postId") Long postId,
+      @PathVariable(name = "boardId") Long boardId,
+      @RequestBody CommentDto.Request request
+  ) {
     return ResponseEntity.ok(
-        postService.writePost(authService.getUserName(), boardId, request));
+        commentService.writeComment(authService.getUserName(), postId, boardId, request));
   }
 
   @PutMapping
-  public ResponseEntity<?> updatePost(
-      @Valid @RequestBody PostDto.Request request,
-      @RequestParam(name = "postId") Long postId,
-      @PathVariable(name = "boardId") Long boardId) {
+  public ResponseEntity<?> updateComment(
+      @RequestParam(name = "commentId") Long commentId,
+      @PathVariable(name = "boardId") Long boardId,
+      @RequestBody CommentDto.Request request
+  ) {
     return ResponseEntity.ok(
-        postService.updatePost(authService.getUserName(), postId, boardId, request));
+        commentService.updateComment(authService.getUserName(), commentId, boardId, request));
   }
 
   @DeleteMapping
-  public ResponseEntity<?> deletePost(
-      @RequestParam(name = "postId") Long postId,
-      @PathVariable(name = "boardId") Long boardId) {
-    postService.deletePost(authService.getUserName(), postId, boardId);
+  public ResponseEntity<?> deleteComment(
+      @RequestParam(name = "commentId") Long commentId,
+      @PathVariable(name = "boardId") Long boardId
+  ) {
+    commentService.deleteComment(authService.getUserName(), commentId, boardId);
     return ResponseEntity.ok(HttpStatus.OK);
   }
 }

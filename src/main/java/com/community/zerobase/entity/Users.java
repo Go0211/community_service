@@ -75,5 +75,12 @@ public class Users{
         .phoneNumber(joinDto.getPhoneNumber())
         .build();
   }
+
+  public void updateUser(UsersDto.Info infoDto) {
+    this.name = infoDto.getName();
+    this.birthDate = infoDto.getBirthDate();
+    this.phoneNumber = infoDto.getPhoneNumber();
+    this.modificationDate = LocalDateTime.now();
+  }
 }
 
