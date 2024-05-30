@@ -1,0 +1,29 @@
+spring:
+  # driver-class-name: com.mysql.cj.jdbc.Driver
+  # url : jdbc:mysql://localhost:3306/community?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+  # username: zerobase
+  # password: zerobase
+  datasource:
+    driver-class-name: org.h2.Driver  # Database? H2? ?????.
+    url: jdbc:h2:mem:community  # H2 ?? ??
+    username: sa  # H2 ?? ? ??? username ?? (??? ??? ??)
+    password:  # H2 ?? ? ??? password ?? (??? ??? ??)
+  h2:
+    console:
+      enabled: true  # H2 Console? ???? ?? (H2 Console? H2 Database? UI? ????? ??)
+      path: /h2-console  # H2 Console? Path
+  jpa :
+    show-sql: true # true ??? JPA ??? ?? ??
+    hibernate:
+      ddl-auto: create   # ???? create ????? validate
+    properties:
+      hibernate:
+        format_sql : true # JPA? ???? Hibernate? ????? ??? SQL? ???? ????.
+        show_sql: true
+
+jwt:
+  secret: emVyb2Jhc2UyMDI0Y29tbXVuaXR5MDVwcm9qZWN0X2luY29kaW5nX2Rhd29vbmluZzExMDZfZ29zdDAyMTFfbG92aW5n
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
