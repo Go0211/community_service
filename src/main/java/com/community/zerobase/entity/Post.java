@@ -63,5 +63,6 @@ public class Post {
   public void updatePost(PostDto.Request request) {
     this.title = request.getTitle();
     this.content = request.getContent();
+    this.modificationDate = LocalDateTime.now();
   }
 }

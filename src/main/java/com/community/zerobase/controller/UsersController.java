@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,7 +39,7 @@ public class UsersController {
     );
   }
 
-  @PostMapping("/info")
+  @PutMapping("/info")
   public ResponseEntity<?> info(@Valid @RequestBody UsersDto.Info usersDto) {
     return ResponseEntity.ok(
         usersService.updateInfo(usersDto)

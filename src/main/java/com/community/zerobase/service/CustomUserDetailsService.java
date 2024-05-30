@@ -1,6 +1,7 @@
 package com.community.zerobase.service;
 
 import com.community.zerobase.entity.Users;
+import com.community.zerobase.exception.ErrorException.NotFoundException;
 import com.community.zerobase.repository.UsersRepository;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
   @Override
   @Transactional
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return usersRepository.findByEmail(username)
+  public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    return usersRepository.findByEmail(email)
         .map(this::createUserDetails)
-        .orElseThrow(() -> new UsernameNotFoundException(username + " -> 데이터베이스에서 찾을 수 없습니다."));
+        .orElseThrow(() -> new NotFoundException("not found user"));
   }
 
   // DB 에 User 값이 존재한다면 UserDetails 객체로 만들어서 리턴

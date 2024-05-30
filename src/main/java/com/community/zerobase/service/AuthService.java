@@ -4,6 +4,9 @@ import com.community.zerobase.dto.LoginDto;
 import com.community.zerobase.dto.TokenDto;
 import com.community.zerobase.dto.UsersDto;
 import com.community.zerobase.entity.Users;
+import com.community.zerobase.exception.ErrorException;
+import com.community.zerobase.exception.ErrorException.AlreadyExistException;
+import com.community.zerobase.exception.ErrorException.NotFoundException;
 import com.community.zerobase.jwt.TokenProvider;
 import com.community.zerobase.repository.UsersRepository;
 import java.time.LocalDateTime;
@@ -32,8 +35,7 @@ public class AuthService {
   public String join(UsersDto.Join joinDto) {
     // 이메일로 회원 존재 여부를 체크
     if (usersRepository.existsByEmail(joinDto.getEmail())) {
-      // 이메일이 이미 존재한다면 RuntimeException
-      throw new RuntimeException("이미 가입되어 있는 유저입니다");
+      throw new AlreadyExistException("user exist");
     }
 
     // 입력받은 dto를 비밀번호 인코딩 후 member로 변환
@@ -67,7 +69,8 @@ public class AuthService {
 
   private void updateLoginDateTime(String email) {
     Users users = usersRepository.findByEmail(email)
-        .orElseThrow(() -> new RuntimeException("user not found"));
+        .orElseThrow(() -> new NotFoundException("user not found"));
+
     users.setLastLoginDate(LocalDateTime.now());
     usersRepository.save(users);
   }

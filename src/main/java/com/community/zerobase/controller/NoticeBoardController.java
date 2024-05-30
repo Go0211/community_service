@@ -1,6 +1,5 @@
 package com.community.zerobase.controller;
 
-import com.community.zerobase.service.AuthService;
 import com.community.zerobase.service.NoticeBoardService;
 import com.community.zerobase.service.PostService;
 import java.util.Map;
@@ -21,19 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/board")
 public class NoticeBoardController {
   private final NoticeBoardService noticeBoardService;
-  private final PostService postService;
 
-  @PostMapping("/create")
-  public ResponseEntity<?> noticeBoardCreate(@RequestBody Map<String, String> noticeBoardName) {
-    try {
+  @PostMapping("")
+  public ResponseEntity<?> createNoticeBoard(@RequestBody Map<String, String> noticeBoardName) {
       return ResponseEntity.ok(
           noticeBoardService.createBoard(noticeBoardName.get("name")));
-    } catch (IllegalAccessException e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
   }
 
-  @GetMapping("")
+  @GetMapping("/list")
   public ResponseEntity<?> getNoticeBoardList(
       @RequestParam(name = "searchText", defaultValue = "") String searchText,
       @PageableDefault(
@@ -42,17 +36,5 @@ public class NoticeBoardController {
       Pageable pageable
   ) {
     return ResponseEntity.ok(noticeBoardService.getAllBoard(pageable, searchText));
-  }
-
-  @GetMapping("/list")
-  public ResponseEntity<?> getNoticeBoard(
-      @RequestParam(name = "searchText", defaultValue = "") String searchText,
-      @RequestParam(name = "boardId") Long boardId,
-      @PageableDefault(
-          page = 0, size = 10, sort = "writeDate",
-          direction = Direction.DESC)
-      Pageable pageable
-  ) {
-    return ResponseEntity.ok(postService.getPostList(pageable, searchText, boardId));
   }
 }
