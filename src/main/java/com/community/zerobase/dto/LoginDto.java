@@ -3,6 +3,7 @@ package com.community.zerobase.dto;
 import com.community.zerobase.entity.Users;
 import com.community.zerobase.role.Dormant;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

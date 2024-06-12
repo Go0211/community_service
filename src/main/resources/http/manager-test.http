@@ -1,0 +1,31 @@
+### POST manager
+POST http://localhost:8080/board/1/manager
+Content-Type: application/json
+Authorization: Bearer asdsa
+
+{
+  "email" : "1@2"
+}
+
+### PUT manager
+PUT http://localhost:8080/board/1/manager
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODE4NTM0MX0.saH0PjCcn6ptedCR71kw-kk0r8M6RgKXocddhG4GobSYs5bwn1GSMFdWpLJNLk0SQwyzdmFr_W3f-GmbaAnR-Q
+
+{
+  "email" : "1@2"
+}
+
+
+### DELETE manager
+DELETE http://localhost:8080/board/1/manager
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODE4NTM0MX0.saH0PjCcn6ptedCR71kw-kk0r8M6RgKXocddhG4GobSYs5bwn1GSMFdWpLJNLk0SQwyzdmFr_W3f-GmbaAnR-Q
+
+{
+  "email" : "1@1"
+}
+
+### GET manager list
+GET http://localhost:8080/board/1/manager/list
+Content-Type: application/json

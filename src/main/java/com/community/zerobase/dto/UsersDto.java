@@ -28,11 +28,9 @@ public class UsersDto {
     @NotBlank(message = "이름은 꼭 입력해야 합니다.")
     String name;
 
-    @NotBlank(message = "생년월일은 꼭 입력해야 합니다.")
     @Pattern(regexp = "\\d{4}.\\d{2}.\\d{2}", message = "생년월일은 yyyy.mm.dd형식으로 입력 되야합니다.")
     String birthDate;
 
-    @NotBlank(message = "전화번호는 꼭 입력해야 합니다.")
     @Size(min = 11, max = 11, message = "입력은 11자리여야 합니다.")
     String phoneNumber;
 
@@ -54,11 +52,9 @@ public class UsersDto {
     @NotBlank(message = "이름은 꼭 입력해야 합니다.")
     String name;
 
-    @NotBlank(message = "생년월일은 꼭 입력해야 합니다.")
     @Pattern(regexp = "\\d{4}.\\d{2}.\\d{2}", message = "생년월일은 yyyy.mm.dd형식으로 입력 되야합니다.")
     String birthDate;
 
-    @NotBlank(message = "전화번호는 꼭 입력해야 합니다.")
     @Size(min = 11, max = 11, message = "입력은 11자리여야 합니다.")
     String phoneNumber;
 

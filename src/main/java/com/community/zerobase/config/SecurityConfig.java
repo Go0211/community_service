@@ -48,6 +48,10 @@ public class SecurityConfig {
             // h2는 배포 시 주석 or 삭제해야한다.
             .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/login", "/join").permitAll()
+            .requestMatchers("board/list").permitAll()
+            .requestMatchers("/board/*/post/list").permitAll()
+            .requestMatchers("/board/*/comment/list").permitAll()
+            .requestMatchers("/board/*/manager/list").permitAll()
             .anyRequest().authenticated())
 
         // JwtFilter 를 addFilterBefore 로 등록했던 JwtSecurityConfig 클래스를 적용
