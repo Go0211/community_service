@@ -11,6 +11,13 @@ import lombok.NoArgsConstructor;
 
 public class NoticeBoardDto {
 
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  public static class Request {
+    Long id;
+    String name;
+  }
 
   @Data
   @NoArgsConstructor

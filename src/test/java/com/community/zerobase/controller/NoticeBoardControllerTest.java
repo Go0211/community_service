@@ -51,14 +51,14 @@ class NoticeBoardControllerTest {
   @DisplayName("게시판 생성 성공")
   void successCreateNoticeBoard() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("name", "123");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(null, "123");
 
     ArrayList<String> noticeBoardDtoList = new ArrayList<>();
     noticeBoardDtoList.add("1@1");
 
     NoticeBoardDto.Response noticeBoardDto = Response.builder()
-        .name(noticeBoardMap.get("name").toString())
+        .name(request.getName())
         .createDate(LocalDateTime.now())
         .managerList(noticeBoardDtoList)
         .build();
@@ -66,18 +66,18 @@ class NoticeBoardControllerTest {
     // when
     when(tokenProvider.validateToken("Bearer token"))
         .thenReturn(true);
-    when(noticeBoardService.createBoard(noticeBoardMap.get("name").toString()))
+    when(noticeBoardService.createBoard(request))
         .thenReturn(noticeBoardDto);
 
     // then
     mockMvc.perform(post("/board")
             .header("Authorization", "Bearer token")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.name")
-            .value(noticeBoardMap.get("name").toString()))
+            .value(request.getName()))
         .andExpect(jsonPath("$.managerList[0]")
             .value("1@1"));
   }
@@ -86,17 +86,17 @@ class NoticeBoardControllerTest {
   @DisplayName("로그인하지 않았을 시 게시판 생성 실패")
   void failCreateNoticeBoardWithOutLogin() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("name", "123");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(null, "123");
 
     // when
-    when(noticeBoardService.createBoard(noticeBoardMap.get("name").toString()))
+    when(noticeBoardService.createBoard(request))
         .thenThrow(new NullException("null jwt token"));
 
     // then
     mockMvc.perform(post("/board")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message")
@@ -109,17 +109,17 @@ class NoticeBoardControllerTest {
   @DisplayName("이름이 없을 시 게시판 생성 실패")
   void failCreateNoticeBoardWithOutName() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("name", "123");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(null, null);
 
     // when
-    when(noticeBoardService.createBoard(noticeBoardMap.get("name").toString()))
+    when(noticeBoardService.createBoard(request))
         .thenThrow(new NullException("notice board name empty"));
 
     // then
     mockMvc.perform(post("/board")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message")
@@ -132,17 +132,17 @@ class NoticeBoardControllerTest {
   @DisplayName("해당 이름의 게시판이 존재 시 게시판 생성 실패")
   void failCreateNoticeBoardExistName() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("name", "123");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(null, "123");
 
     // when
-    when(noticeBoardService.createBoard(noticeBoardMap.get("name").toString()))
+    when(noticeBoardService.createBoard(request))
         .thenThrow(new AlreadyExistException("notice board exist"));
 
     // then
     mockMvc.perform(post("/board")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isConflict())
         .andExpect(jsonPath("$.message")
@@ -155,33 +155,29 @@ class NoticeBoardControllerTest {
   @DisplayName("게시판 수정 성공")
   void successUpdateNoticeBoard() throws Exception {
     //given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("name", "123");
-    noticeBoardMap.put("id", "1");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(1L, "123");
 
     ArrayList<String> noticeBoardDtoList = new ArrayList<>();
     noticeBoardDtoList.add("1@1");
 
     NoticeBoardDto.Response noticeBoardDto = Response.builder()
-        .name(noticeBoardMap.get("name").toString())
+        .name(request.getName())
         .createDate(LocalDateTime.now())
         .managerList(noticeBoardDtoList)
         .build();
 
     // when
-    when(noticeBoardService.updateBoard(
-        Long.parseLong(noticeBoardMap.get("id").toString()),
-        noticeBoardMap.get("name").toString()))
-        .thenReturn(noticeBoardDto);
+    when(noticeBoardService.updateBoard(request)).thenReturn(noticeBoardDto);
 
     // then
     mockMvc.perform(put("/board")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.name")
-            .value(noticeBoardMap.get("name").toString()))
+            .value(request.getName()))
         .andExpect(jsonPath("$.managerList[0]")
             .value("1@1"));
   }
@@ -190,20 +186,17 @@ class NoticeBoardControllerTest {
   @DisplayName("이름이 입력하지 아닐 시 게시판 수정 실패")
   void failUpdateNoticeBoardWithOutName() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("name", "");
-    noticeBoardMap.put("id", "1");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(1L, "123");
 
     // when
-    when(noticeBoardService.updateBoard(
-        Long.parseLong(noticeBoardMap.get("id").toString()),
-        noticeBoardMap.get("name").toString()))
+    when(noticeBoardService.updateBoard(request))
         .thenThrow(new NullException("notice board name empty"));
 
     // then
     mockMvc.perform(put("/board")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message")
@@ -216,20 +209,16 @@ class NoticeBoardControllerTest {
   @DisplayName("수정 할 게시판 id가 없을 시 게시판 수정 실패")
   void failUpdateNoticeBoardWithOutId() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("name", "123");
-    noticeBoardMap.put("id", "1");
-
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(1L, "123");
     // when
-    when(noticeBoardService.updateBoard(
-        Long.parseLong(noticeBoardMap.get("id").toString()),
-        noticeBoardMap.get("name").toString()))
+    when(noticeBoardService.updateBoard(request))
         .thenThrow(new NullException("not have board"));
 
     // then
     mockMvc.perform(put("/board")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message")
@@ -242,20 +231,17 @@ class NoticeBoardControllerTest {
   @DisplayName("게시판 이름이 이미 존재할 시 게시판 수정 실패")
   void failUpdateNoticeBoardExistName() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("name", "123");
-    noticeBoardMap.put("id", "1");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(1L, "123");
 
     // when
-    when(noticeBoardService.updateBoard(
-        Long.parseLong(noticeBoardMap.get("id").toString()),
-        noticeBoardMap.get("name").toString()))
+    when(noticeBoardService.updateBoard(request))
         .thenThrow(new AlreadyExistException("already use notice board name"));
 
     // then
     mockMvc.perform(put("/board")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isConflict())
         .andExpect(jsonPath("$.message")
@@ -268,20 +254,17 @@ class NoticeBoardControllerTest {
   @DisplayName("총관리자가 아닐 시 게시판 수정 실패")
   void failUpdateNoticeBoardNotMatchMainManager() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("name", "123");
-    noticeBoardMap.put("id", "1");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(1L, "123");
 
     // when
-    when(noticeBoardService.updateBoard(
-        Long.parseLong(noticeBoardMap.get("id").toString()),
-        noticeBoardMap.get("name").toString()))
+    when(noticeBoardService.updateBoard(request))
         .thenThrow(new NullException("not match manager"));
 
     // then
     mockMvc.perform(put("/board")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message")
@@ -294,20 +277,17 @@ class NoticeBoardControllerTest {
   @DisplayName("로그인 하지 않았을 시 게시판 수정 실패")
   void failUpdateNoticeBoardWithOutLogin() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("name", "123");
-    noticeBoardMap.put("id", "1");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(1L, "123");
 
     // when
-    when(noticeBoardService.updateBoard(
-        Long.parseLong(noticeBoardMap.get("id").toString()),
-        noticeBoardMap.get("name").toString()))
+    when(noticeBoardService.updateBoard(request))
         .thenThrow(new NullException("null jwt token"));
 
     // then
     mockMvc.perform(put("/board")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message")
@@ -320,13 +300,13 @@ class NoticeBoardControllerTest {
   @DisplayName("게시판 삭제 성공")
   void successDeleteNoticeBoard() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("id", "1");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(1L, null);
     // when
     // then
     mockMvc.perform(delete("/board")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isOk());
   }
@@ -335,14 +315,14 @@ class NoticeBoardControllerTest {
   @DisplayName("게시판 아이디가 없으면 삭제 실패")
   void failDeleteNoticeBoardWithOutId() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("id", "");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(1L, null);
 
     // when
     // then
     mockMvc.perform(delete("/board")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message")
@@ -355,8 +335,8 @@ class NoticeBoardControllerTest {
   @DisplayName("총관리자 아닐 시 삭제 실패")
   void failDeleteNoticeBoardNotMatchMainManager() throws Exception {
     // given
-    Map<String, Object> noticeBoardMap = new HashMap<>();
-    noticeBoardMap.put("id", "123");
+    NoticeBoardDto.Request request
+        = new NoticeBoardDto.Request(1L, null);
 
     // when
     when(tokenProvider.validateToken("invalid_token"))
@@ -366,7 +346,7 @@ class NoticeBoardControllerTest {
     mockMvc.perform(delete("/board")
             .header("Authorization", "Bearer invalid_token")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(noticeBoardMap)))
+            .content(objectMapper.writeValueAsString(request)))
         .andDo(print())
         .andExpect(status().isBadRequest())
         .andExpect(jsonPath("$.message")

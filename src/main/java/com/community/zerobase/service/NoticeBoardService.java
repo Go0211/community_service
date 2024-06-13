@@ -4,6 +4,7 @@ import com.community.zerobase.converter.ModelToObjectConverter;
 import com.community.zerobase.dto.ManagerDto;
 import com.community.zerobase.dto.ManagerDto.Response;
 import com.community.zerobase.dto.NoticeBoardDto;
+import com.community.zerobase.dto.NoticeBoardDto.Request;
 import com.community.zerobase.entity.Manager;
 import com.community.zerobase.entity.NoticeBoard;
 import com.community.zerobase.entity.Users;
@@ -32,7 +33,9 @@ public class NoticeBoardService {
   private final ManagerRepository managerRepository;
 
   @Transactional
-  public NoticeBoardDto.Response createBoard(String name) {
+  public NoticeBoardDto.Response createBoard(NoticeBoardDto.Request request) {
+    String name = request.getName();
+
     if (existNoticeBoard(name)) {
       throw new AlreadyExistException("notice board exist");
     }
@@ -55,7 +58,10 @@ public class NoticeBoardService {
   }
 
   @Transactional
-  public NoticeBoardDto.Response updateBoard(Long boardId, String name) {
+  public NoticeBoardDto.Response updateBoard(NoticeBoardDto.Request request) {
+    Long boardId = request.getId();
+    String name = request.getName();
+
     if (name == null || name.isEmpty()) {
       throw new NullException("notice board name empty");
     }
@@ -76,7 +82,9 @@ public class NoticeBoardService {
   }
 
   @Transactional
-  public void deleteBoard(Long boardId) {
+  public void deleteBoard(NoticeBoardDto.Request request) {
+    Long boardId = request.getId();
+
     NoticeBoard noticeBoard = commonService.getNoticeBoard(boardId);
 
     deleteAllManagers(noticeBoard);

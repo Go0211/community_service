@@ -1,9 +1,8 @@
 package com.community.zerobase.controller;
 
 import com.community.zerobase.dto.ManagerDto.Request;
-import com.community.zerobase.entity.Manager;
 import com.community.zerobase.service.ManagerService;
-import com.community.zerobase.service.NoticeBoardService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,7 +29,7 @@ public class ManagerController {
   @PostMapping
   public ResponseEntity<?> addManager(
       @PathVariable("boardId") Long boardId,
-      @RequestBody Request request
+      @Valid @RequestBody Request request
   ) {
     managerService.checkNotAllowInput(request.getEmail(), boardId);
 
@@ -41,7 +40,7 @@ public class ManagerController {
   @PutMapping
   public ResponseEntity<?> changeMainManager(
       @PathVariable("boardId") Long boardId,
-      @RequestBody Request request
+      @Valid @RequestBody Request request
   ) {
     managerService.checkNotAllowInput(request.getEmail(), boardId);
 
@@ -53,7 +52,7 @@ public class ManagerController {
   @DeleteMapping
   public ResponseEntity<?> deleteManager(
       @PathVariable("boardId") Long boardId,
-      @RequestBody Request request
+      @Valid @RequestBody Request request
   ) {
     managerService.checkNotAllowInput(request.getEmail(), boardId);
 

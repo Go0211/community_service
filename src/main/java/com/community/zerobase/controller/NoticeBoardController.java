@@ -1,5 +1,6 @@
 package com.community.zerobase.controller;
 
+import com.community.zerobase.dto.NoticeBoardDto;
 import com.community.zerobase.exception.ErrorException;
 import com.community.zerobase.exception.ErrorException.NullException;
 import com.community.zerobase.service.NoticeBoardService;
@@ -27,44 +28,26 @@ public class NoticeBoardController {
   private final NoticeBoardService noticeBoardService;
 
   @PostMapping
-  public ResponseEntity<?> createNoticeBoard(@RequestBody Map<String, Object> noticeBoardMap) {
-    String noticeBoardName = (String) noticeBoardMap.get("name");
-
+  public ResponseEntity<?> createNoticeBoard(@RequestBody NoticeBoardDto.Request request) {
     return ResponseEntity.ok(
-        noticeBoardService.createBoard(noticeBoardName));
+        noticeBoardService.createBoard(request));
   }
 
   @PutMapping
-  public ResponseEntity<?> updateNoticeBoard(@RequestBody Map<String, Object> noticeBoardMap) {
-    String str = (String) noticeBoardMap.get("id");
+  public ResponseEntity<?> updateNoticeBoard(@RequestBody NoticeBoardDto.Request request) {
 
-    if (str.isEmpty() || str == null) {
-      throw new NullException("not have board");
-    }
-
-    Long noticeBoardId = Long.valueOf(str);
-    String noticeBoardName = (String) noticeBoardMap.get("name");
-
-    noticeBoardService.checkMainManager(noticeBoardId);
+    noticeBoardService.checkMainManager(request.getId());
 
     return ResponseEntity.ok(
-        noticeBoardService.updateBoard(noticeBoardId, noticeBoardName));
+        noticeBoardService.updateBoard(request));
   }
 
 
   @DeleteMapping
-  public ResponseEntity<?> deleteNoticeBoard(@RequestBody Map<String, Object> noticeBoardMap) {
-    String str = (String) noticeBoardMap.get("id");
+  public ResponseEntity<?> deleteNoticeBoard(@RequestBody NoticeBoardDto.Request request) {
+    noticeBoardService.checkMainManager(request.getId());
 
-    if (str.isEmpty() || str == null) {
-      throw new NullException("not have board");
-    }
-
-    Long noticeBoardId = Long.valueOf(str);
-
-    noticeBoardService.checkMainManager(noticeBoardId);
-
-    noticeBoardService.deleteBoard(noticeBoardId);
+    noticeBoardService.deleteBoard(request);
 
     return ResponseEntity.ok(HttpStatus.OK);
   }

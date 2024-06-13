@@ -26,6 +26,7 @@ public class SecurityConfigTest {
         .sessionManagement(session -> session
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(request -> request
+            .requestMatchers("info").authenticated()
             .anyRequest().permitAll());
 
     return http.build();
