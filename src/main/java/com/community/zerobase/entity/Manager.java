@@ -1,15 +1,17 @@
 package com.community.zerobase.entity;
 
+import com.community.zerobase.role.Auth;
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,21 +24,19 @@ import lombok.Setter;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "notice_board")
+@Table(name = "notice_board_manager")
 @Builder
-public class NoticeBoard {
-  @PrePersist
-  protected void onCreate() {
-    this.createDate = LocalDateTime.now();
-  }
-
+public class Manager {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  Long id;
+  private int id;
 
-  @Column(name = "name", unique = true)
-  String name;
+  @ManyToOne
+  private Users users;
 
-  @Column(name = "create_date")
-  LocalDateTime createDate;
+  @ManyToOne
+  private NoticeBoard noticeBoard;
+
+  @Enumerated(value = EnumType.STRING)
+  private Auth auth;
 }

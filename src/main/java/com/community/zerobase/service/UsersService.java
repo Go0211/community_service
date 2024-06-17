@@ -3,30 +3,28 @@ package com.community.zerobase.service;
 import com.community.zerobase.dto.UsersDto;
 import com.community.zerobase.entity.Users;
 import com.community.zerobase.exception.ErrorException;
-import com.community.zerobase.exception.ErrorException.NotFoundException;
+import com.community.zerobase.exception.ErrorException.MissMatchedException;
 import com.community.zerobase.repository.UsersRepository;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UsersService{
+  private final CommonService commonService;
   private final UsersRepository usersRepository;
 
-  public UsersDto.Info getInfo(String email) {
-    Users users = usersRepository.findByEmail(email).orElseThrow(
-        () -> new NotFoundException("email not found"));
-
-    return UsersDto.Info.usersToInfoDto(users);
+  public UsersDto.Info getInfo() {
+    return UsersDto.Info.usersToInfoDto(
+        commonService.getUsers(commonService.getUserEmail()));
   }
 
-  @Transactional
   public UsersDto.Info updateInfo(UsersDto.Info infoDto) {
-    Users users = usersRepository.findByEmail(infoDto.getEmail())
-        .orElseThrow(() -> new NotFoundException("email not found"));
+    if (!infoDto.getEmail().equals(commonService.getUserEmail())) {
+      throw new MissMatchedException("not match users");
+    }
+
+    Users users = commonService.getUsers(infoDto.getEmail());
 
     //dirty checking
     users.updateUser(infoDto);

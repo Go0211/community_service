@@ -1,6 +1,7 @@
 package com.community.zerobase.repository;
 
 import com.community.zerobase.entity.NoticeBoard;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,6 @@ public interface NoticeBoardRepository extends JpaRepository<NoticeBoard, Long> 
   boolean existsByName(String name);
 
   Page<NoticeBoard> findByNameContaining(Pageable pageable, String searchText);
+
+  Optional<NoticeBoard> findByName(String name);
 }

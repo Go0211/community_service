@@ -1,0 +1,37 @@
+### 회원가입
+POST http://localhost:8080/join
+Content-Type: application/json
+
+{
+ 	"email" : "1@10",
+     "password" : "123",
+     "name" : "123",
+     "birthDate" : "9999.99.99",
+     "phoneNumber" : "01011112222"
+}
+
+### 로그인
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+ 	"email" : "1@1",
+     "password" : "123"
+}
+
+### 내 정보 보기
+GET http://localhost:8080/info
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODExMDk1MX0.AY17pjCKEn3Tthpq7CcDuCC_yqc2m_9Ic1QgzMALgXAj6rgalRhqFx_mo3k13FFSZKBWna3PqsTg6yh5OYuYEw
+
+### 내 정보 수정
+PUT http://localhost:8080/info
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODExMjcxMH0.3UDEf5k13RppaKgJg8pmlbxIVcV73dc2z1UqLBtqfQHEovZQg4aSoeqEjxF_AORA-PuLIqSjhs9gJTnc1o4DWg
+
+{
+  "email" : "1@2",
+  "name" : "321",
+  "birthDate" : "1234.11.22",
+  "phoneNumber" : "01011112222"
+}
