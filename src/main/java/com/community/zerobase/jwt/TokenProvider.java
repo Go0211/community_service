@@ -1,6 +1,10 @@
 package com.community.zerobase.jwt;
 
 import com.community.zerobase.dto.TokenDto;
+import com.community.zerobase.exception.ErrorException.ExpiredJwtTokenException;
+import com.community.zerobase.exception.ErrorException.InvalidJwtTokenException;
+import com.community.zerobase.exception.ErrorException.NotSupportJwtException;
+import com.community.zerobase.exception.ErrorException.NullException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -81,7 +85,7 @@ public class TokenProvider {
     Claims claims = parseClaims(accessToken);
 
     if (claims.get(AUTHORITIES_KEY) == null) {
-      throw new RuntimeException("권한 정보가 없는 토큰입니다.");
+       throw new RuntimeException("권한 정보가 없는 토큰입니다.");
     }
 
     // 클레임에서 권한 정보 가져오기
@@ -103,18 +107,17 @@ public class TokenProvider {
       return true;
       // 잘못된 JWT 서명 / 서명이 not올바름 / 토큰이 변조
     } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-      log.info("잘못된 JWT 서명입니다.");
+      throw new InvalidJwtTokenException("invalid jwt token");
       // 만료된 토큰
     } catch (ExpiredJwtException e) {
-      log.info("만료된 JWT 토큰입니다.");
+      throw new ExpiredJwtTokenException("expired jwt token");
       // 지원되지 않는 JWT 토큰
     } catch (UnsupportedJwtException e) {
-      log.info("지원되지 않는 JWT 토큰입니다.");
+      throw new NotSupportJwtException("not support jwt token");
       // 토큰이 null / 빈 문자열
     } catch (IllegalArgumentException e) {
-      log.info("JWT 토큰이 잘못되었습니다.");
+      throw new NullException("null jwt token");
     }
-    return false;
   }
 
   private Claims parseClaims(String accessToken) {

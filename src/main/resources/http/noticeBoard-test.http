@@ -1,0 +1,39 @@
+### POST board
+POST http://localhost:8080/board
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODE4NTM0MX0.saH0PjCcn6ptedCR71kw-kk0r8M6RgKXocddhG4GobSYs5bwn1GSMFdWpLJNLk0SQwyzdmFr_W3f-GmbaAnR-Q
+
+{
+  "name" : "123"
+}
+
+### PUT board
+PUT http://localhost:8080/board
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODE4NDk4Nn0.oVwzIPV7vM_b9BkQ5A26V916tpI_2mweud5twbT1EadUWIa35Kpnxnv2tFVidSI7NFxz9O5wtbQxd-Tfmd-0Pg
+
+{
+  "id" : "1",
+  "name" : "adasdsa"
+}
+
+### DELETE board
+DELETE http://localhost:8080/board
+Content-Type: application/json
+Authorization: Bearer invalid_token
+
+{
+  "id" : "1"
+}
+
+### GET board list All
+GET http://localhost:8080/board/list
+Content-Type: application/json
+
+### GET board list with searchText
+GET http://localhost:8080/board/list?searchText=2
+Content-Type: application/json
+
+### GET board list with searchText and many condition
+GET http://localhost:8080/board/list?page=10&size=5
+Content-Type: application/json

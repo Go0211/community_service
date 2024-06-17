@@ -1,6 +1,5 @@
 package com.community.zerobase.dto;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,5 +8,5 @@ import lombok.Data;
 public class ErrorDto {
   private String message;
   private int state;
-  private LocalDateTime errorTime;
+  private String errorTime;
 }

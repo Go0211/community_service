@@ -1,0 +1,53 @@
+### 게시물 작성
+POST http://localhost:8080/board/1/post
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDIiLCJhdXRoIjoiTiIsImV4cCI6MTcxODAwNzY4OH0.Ktx9c0xl2FaekDNmZpMlg-cKkiByjUHoKr99NOwsHCJ9aTrlr5BkJf_DJvjV-BeKh943LsuQvJvKYgfhzFjvuQ
+
+{
+  "title" : "13213123213",
+  "content": "13213213"
+}
+
+### 게시물 수정
+PUT http://localhost:8080/board/1/post
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDIiLCJhdXRoIjoiTiIsImV4cCI6MTcxNzkzODU5MH0.OOCcC0O-p5MvSstlBBI8bBlrI8sZ_8BOeV4QTufM2SRMUeF0OsOCChbAXTcFcwTzVUZDGxc4bBqrs5RiqrfGRw
+
+{
+  "postId" : 1,
+  "title" : "12312321",
+  "content": "1235454VDF"
+}
+
+### 게시물 삭제
+DELETE http://localhost:8080/board/1/post
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDIiLCJhdXRoIjoiTiIsImV4cCI6MTcxNzkzODU5MH0.OOCcC0O-p5MvSstlBBI8bBlrI8sZ_8BOeV4QTufM2SRMUeF0OsOCChbAXTcFcwTzVUZDGxc4bBqrs5RiqrfGRw
+
+{
+  "postId" : "3"
+}
+
+### 게시물 검색 (검색어 x)
+GET http://localhost:8080/board/1/post/list
+Content-Type: application/json
+
+### 게시물 검색 (검색어 0 / 타입지정 x)
+GET http://localhost:8080/board/1/post/list?searchText=ㅋ
+Content-Type: application/json
+
+### 게시물 검색 (검색어 0 / 타입 : 게시자)
+GET http://localhost:8080/board/1/post/list?searchText=@3&type=user
+Content-Type: application/json
+
+### 게시물 검색 (검색어 0 / 타입 : 제목)
+GET http://localhost:8080/board/1/post/list?searchText=2&type=title
+Content-Type: application/json
+
+### 게시물 검색 (검색어 0 / 타입 : 내용물)
+GET http://localhost:8080/board/1/post/list?searchText=2&type=content
+Content-Type: application/json
+
+### 게시물 검색 (페이지 네이션 설정 변경)
+GET http://localhost:8080/board/1/post/list?page=10&size=5
+Content-Type: application/json

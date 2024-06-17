@@ -21,12 +21,11 @@ public class UsersController {
 
   @PostMapping("/join")
   public ResponseEntity<?> join(@Valid @RequestBody UsersDto.Join joinDto) {
-    return ResponseEntity.ok(
-        authService.join(joinDto)+"님 회원가입 되었습니다.");
+    return ResponseEntity.ok(authService.join(joinDto));
   }
 
   @PostMapping("/login")
-  public ResponseEntity<?> join(@Valid @RequestBody LoginDto.Request request) {
+  public ResponseEntity<?> login(@Valid @RequestBody LoginDto.Request request) {
     return ResponseEntity.ok(
         authService.login(request)
     );
@@ -35,14 +34,12 @@ public class UsersController {
   @GetMapping("/info")
   public ResponseEntity<?> info() {
     return ResponseEntity.ok(
-        usersService.getInfo(authService.getUserName())
-    );
+        usersService.getInfo());
   }
 
   @PutMapping("/info")
   public ResponseEntity<?> info(@Valid @RequestBody UsersDto.Info usersDto) {
     return ResponseEntity.ok(
-        usersService.updateInfo(usersDto)
-    );
+        usersService.updateInfo(usersDto));
   }
 }

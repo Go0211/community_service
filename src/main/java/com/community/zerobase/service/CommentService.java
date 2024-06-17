@@ -1,5 +1,6 @@
 package com.community.zerobase.service;
 
+import com.community.zerobase.converter.ModelToObjectConverter;
 import com.community.zerobase.dto.CommentDto;
 import com.community.zerobase.dto.CommentDto.Request;
 import com.community.zerobase.entity.Comment;
@@ -19,32 +20,34 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CommentService {
+  private final CommonService commonService;
+  private final ModelToObjectConverter converter;
 
   private final CommentRepository commentRepository;
-  private final PostRepository postRepository;
-  private final UsersRepository usersRepository;
 
   public Page<CommentDto.Response> getCommentListUsePost
       (Pageable pageable, Long boardId, Long postId) {
-    Post post = getPost(postId);
+    Post post = commonService.getPost(postId);
 
     if (!post.getNoticeBoard().getId().equals(boardId)) {
       throw new MissMatchedException("not match post");
     }
 
-    return convertPage(commentRepository.findAllByPost(pageable, post));
+    return converter.commentToResponseConvertPage
+        (commentRepository.findAllByPost(pageable, post));
   }
 
   @Transactional
   public CommentDto.Response writeComment
-      (String email, Long postId, Long boardId, CommentDto.Request request) {
-    Post post = getPost(postId);
+      (Long postId, Long boardId, CommentDto.Request request) {
+    Users users
+        = commonService.getUsers(commonService.getUserEmail());
+
+    Post post = commonService.getPost(postId);
 
     if (!post.getNoticeBoard().getId().equals(boardId)) {
       throw new MissMatchedException("not match board");
     }
-
-    Users users = getUsers(email);
 
     Comment comment = Comment.builder()
         .users(users)
@@ -54,63 +57,46 @@ public class CommentService {
 
     commentRepository.save(comment);
 
-    return commentToDto(comment);
+    return converter.commentToDto(comment);
   }
 
   @Transactional
   public CommentDto.Response updateComment
-      (String email, Long commentId, Long boardId, Request request) {
-    Comment comment = getComment(commentId);
+      (Long commentId, Long boardId, Request request) {
+    Users users
+        = commonService.getUsers(commonService.getUserEmail());
+
+    Comment comment = commonService.getComment(commentId);
 
     if (!comment.getPost().getNoticeBoard().getId().equals(boardId)) {
       throw new MissMatchedException("not match post");
     }
 
-    if (!email.equals(comment.getUsers().getEmail())) {
+    if (!users.equals(comment.getUsers())) {
       throw new MissMatchedException("not match user");
     }
 
     //dirty checking
     comment.updateComment(request);
 
-    return commentToDto(comment);
+    return converter.commentToDto(comment);
   }
 
   @Transactional
-  public void deleteComment(String email, Long commentId, Long boardId) {
-    Comment comment = getComment(commentId);
+  public void deleteComment(Long commentId, Long boardId) {
+    Users users
+        = commonService.getUsers(commonService.getUserEmail());
+
+    Comment comment = commonService.getComment(commentId);
 
     if (!comment.getPost().getNoticeBoard().getId().equals(boardId)) {
       throw new MissMatchedException("not match post");
     }
 
-    if (!email.equals(comment.getUsers().getEmail())) {
+    if (!users.equals(comment.getUsers())) {
       throw new MissMatchedException("not match user");
     }
 
     commentRepository.delete(comment);
-  }
-
-  private Users getUsers(String email) {
-    return usersRepository.findByEmail(email)
-        .orElseThrow(() -> new NotFoundException("not have user"));
-  }
-
-  private Post getPost(Long postId) {
-    return postRepository.findById(postId)
-        .orElseThrow(() -> new NotFoundException("not have post"));
-  }
-
-  private Comment getComment(Long commentId) {
-    return commentRepository.findById(commentId)
-        .orElseThrow(() -> new NotFoundException("not have comment"));
-  }
-
-  public Page<CommentDto.Response> convertPage(Page<Comment> commentPage) {
-    return commentPage.map(this::commentToDto);
-  }
-
-  public CommentDto.Response commentToDto(Comment comment) {
-    return CommentDto.Response.commentToDto(comment);
   }
 }

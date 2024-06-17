@@ -1,15 +1,20 @@
 package com.community.zerobase.controller;
 
+import com.community.zerobase.dto.NoticeBoardDto;
+import com.community.zerobase.exception.ErrorException;
+import com.community.zerobase.exception.ErrorException.NullException;
 import com.community.zerobase.service.NoticeBoardService;
-import com.community.zerobase.service.PostService;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,12 +24,32 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/board")
 public class NoticeBoardController {
+
   private final NoticeBoardService noticeBoardService;
 
-  @PostMapping("")
-  public ResponseEntity<?> createNoticeBoard(@RequestBody Map<String, String> noticeBoardName) {
-      return ResponseEntity.ok(
-          noticeBoardService.createBoard(noticeBoardName.get("name")));
+  @PostMapping
+  public ResponseEntity<?> createNoticeBoard(@RequestBody NoticeBoardDto.Request request) {
+    return ResponseEntity.ok(
+        noticeBoardService.createBoard(request));
+  }
+
+  @PutMapping
+  public ResponseEntity<?> updateNoticeBoard(@RequestBody NoticeBoardDto.Request request) {
+
+    noticeBoardService.checkMainManager(request.getId());
+
+    return ResponseEntity.ok(
+        noticeBoardService.updateBoard(request));
+  }
+
+
+  @DeleteMapping
+  public ResponseEntity<?> deleteNoticeBoard(@RequestBody NoticeBoardDto.Request request) {
+    noticeBoardService.checkMainManager(request.getId());
+
+    noticeBoardService.deleteBoard(request);
+
+    return ResponseEntity.ok(HttpStatus.OK);
   }
 
   @GetMapping("/list")

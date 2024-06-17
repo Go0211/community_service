@@ -1,7 +1,6 @@
 package com.community.zerobase.controller;
 
 import com.community.zerobase.dto.CommentDto;
-import com.community.zerobase.service.AuthService;
 import com.community.zerobase.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/board/{boardId}/comment")
 public class CommentController {
-  private final AuthService authService;
   private final CommentService commentService;
 
   @GetMapping("/list")
@@ -45,7 +43,7 @@ public class CommentController {
       @RequestBody CommentDto.Request request
   ) {
     return ResponseEntity.ok(
-        commentService.writeComment(authService.getUserName(), postId, boardId, request));
+        commentService.writeComment(postId, boardId, request));
   }
 
   @PutMapping
@@ -55,7 +53,7 @@ public class CommentController {
       @RequestBody CommentDto.Request request
   ) {
     return ResponseEntity.ok(
-        commentService.updateComment(authService.getUserName(), commentId, boardId, request));
+        commentService.updateComment(commentId, boardId, request));
   }
 
   @DeleteMapping
@@ -63,7 +61,7 @@ public class CommentController {
       @RequestParam(name = "commentId") Long commentId,
       @PathVariable(name = "boardId") Long boardId
   ) {
-    commentService.deleteComment(authService.getUserName(), commentId, boardId);
+    commentService.deleteComment(commentId, boardId);
     return ResponseEntity.ok(HttpStatus.OK);
   }
 }
