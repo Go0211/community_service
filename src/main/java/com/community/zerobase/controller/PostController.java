@@ -1,12 +1,11 @@
 package com.community.zerobase.controller;
 
+import static com.community.zerobase.dto.TemporaryDto.Request;
+
 import com.community.zerobase.dto.PostDto;
-import com.community.zerobase.dto.PostDto.Response;
 import com.community.zerobase.service.PostService;
 import jakarta.validation.Valid;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -41,9 +40,9 @@ public class PostController {
         postService.getPostList(pageable, type, searchText, boardId));
   }
 
-  @GetMapping
+  @GetMapping("/{postId}")
   public ResponseEntity<?> getPost(
-      @RequestParam(name = "postId") Long postId,
+      @PathVariable(name = "postId") Long postId,
       @PathVariable(name = "boardId") Long boardId
   ) {
     return ResponseEntity.ok(
@@ -70,13 +69,49 @@ public class PostController {
 
   @DeleteMapping
   public ResponseEntity<?> deletePost(
-      @RequestBody Map<String, Object> postMap,
+      @Valid @RequestBody PostDto.Request request,
       @PathVariable(name = "boardId") Long boardId
   ) {
-    String str = (String) postMap.get("postId");
-    Long postId = Long.parseLong(str);
+    postService.deletePost(request.getPostId(), boardId);
 
-    postService.deletePost(postId, boardId);
+    return ResponseEntity.ok(HttpStatus.OK);
+  }
+
+  @GetMapping("/temporary")
+  public ResponseEntity<?> getTemporaryPost(
+      @Valid @RequestBody Request request,
+      @PathVariable(name = "boardId") Long boardId
+  ) {
+    return ResponseEntity.ok(
+        postService.getTemporaryPost(request, boardId));
+  }
+
+  @PostMapping("/temporary")
+  public ResponseEntity<?> setTemporaryPost(
+      @Valid @RequestBody Request request,
+      @PathVariable(name = "boardId") Long boardId
+  ) {
+    postService.saveTemporaryPost(request, boardId);
+
+    return ResponseEntity.ok(HttpStatus.OK);
+  }
+
+  @DeleteMapping("/temporary")
+  public ResponseEntity<?> deleteTemporaryPost(
+      @Valid @RequestBody Request request,
+      @PathVariable(name = "boardId") Long boardId
+  ) {
+    postService.deleteTemporaryPost(request, boardId);
+
+    return ResponseEntity.ok(HttpStatus.OK);
+  }
+
+  @PutMapping("/{postId}/likes/up")
+  public ResponseEntity<?> upLikes(
+      @PathVariable(name = "postId") Long postId,
+      @PathVariable(name = "boardId") Long boardId
+  ) {
+    postService.upLikesCount(postId);
 
     return ResponseEntity.ok(HttpStatus.OK);
   }

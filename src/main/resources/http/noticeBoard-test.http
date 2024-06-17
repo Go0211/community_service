@@ -1,7 +1,7 @@
 ### POST board
 POST http://localhost:8080/board
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODE4NTM0MX0.saH0PjCcn6ptedCR71kw-kk0r8M6RgKXocddhG4GobSYs5bwn1GSMFdWpLJNLk0SQwyzdmFr_W3f-GmbaAnR-Q
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODYxODg2OH0.k4hJizGiIBN48jCr8w5d_lxOPVBTxckvJB4llovzXJqrwq2WVKmBrZ2MykoX6sfjC1waxHaXx_fYZn8bLg4LVg
 
 {
   "name" : "123"

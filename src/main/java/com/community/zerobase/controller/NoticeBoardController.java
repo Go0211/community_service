@@ -1,10 +1,7 @@
 package com.community.zerobase.controller;
 
 import com.community.zerobase.dto.NoticeBoardDto;
-import com.community.zerobase.exception.ErrorException;
-import com.community.zerobase.exception.ErrorException.NullException;
 import com.community.zerobase.service.NoticeBoardService;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;

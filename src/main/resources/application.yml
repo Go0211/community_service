@@ -20,6 +20,10 @@ spring:
       hibernate:
         format_sql : true # JPA? ???? Hibernate? ????? ??? SQL? ???? ????.
         show_sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 jwt:
   secret: emVyb2Jhc2UyMDI0Y29tbXVuaXR5MDVwcm9qZWN0X2luY29kaW5nX2Rhd29vbmluZzExMDZfZ29zdDAyMTFfbG92aW5n

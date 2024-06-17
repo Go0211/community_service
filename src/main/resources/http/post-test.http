@@ -1,7 +1,11 @@
+### 게시물 보기
+GET http://localhost:8080/board/1/post/1
+Content-Type: application/json
+
 ### 게시물 작성
 POST http://localhost:8080/board/1/post
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDIiLCJhdXRoIjoiTiIsImV4cCI6MTcxODAwNzY4OH0.Ktx9c0xl2FaekDNmZpMlg-cKkiByjUHoKr99NOwsHCJ9aTrlr5BkJf_DJvjV-BeKh943LsuQvJvKYgfhzFjvuQ
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODYxODg2OH0.k4hJizGiIBN48jCr8w5d_lxOPVBTxckvJB4llovzXJqrwq2WVKmBrZ2MykoX6sfjC1waxHaXx_fYZn8bLg4LVg
 
 {
   "title" : "13213123213",
@@ -25,8 +29,42 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDIiLCJhdXRoIjoiTiIsImV4cCI6MTcxNzkzODU5MH0.OOCcC0O-p5MvSstlBBI8bBlrI8sZ_8BOeV4QTufM2SRMUeF0OsOCChbAXTcFcwTzVUZDGxc4bBqrs5RiqrfGRw
 
 {
-  "postId" : "3"
+  "postId" : 3
 }
+
+### 게시물 임시 저장
+POST http://localhost:8080/board/1/post/temporary
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODYxNTEyMn0.l-wk05lrrWb36wvu5kePCQXUfW-SWvZt7ZYt6EmKg6zNzuTk2uDkJPujD2qiHoBh8YvH44BA4pDrpv2wNQfIPg
+
+{
+  "title" : "1",
+  "content": "12312421"
+}
+
+### 게시물 임시 저장물 가져오기
+GET http://localhost:8080/board/1/post/temporary
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODYxNTEyMn0.l-wk05lrrWb36wvu5kePCQXUfW-SWvZt7ZYt6EmKg6zNzuTk2uDkJPujD2qiHoBh8YvH44BA4pDrpv2wNQfIPg
+
+{
+  "title" : "1"
+}
+
+### 게시물 임시 저장물 삭제하기
+DELETE http://localhost:8080/board/1/post/temporary
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODYxNTEyMn0.l-wk05lrrWb36wvu5kePCQXUfW-SWvZt7ZYt6EmKg6zNzuTk2uDkJPujD2qiHoBh8YvH44BA4pDrpv2wNQfIPg
+
+{
+  "title" : "1"
+}
+
+### 게시물 추천 기능 실행
+PUT http://localhost:8080/board/1/post/1/likes/up
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxQDEiLCJhdXRoIjoiTiIsImV4cCI6MTcxODYxODY0Mn0.Y7L8kcJb31UohLDZMMcP3OeqxhVFU4La_gXEd0FrZbkB3UEJUDRSLpr_PvCYo31g3Vs-vlYpYauhnmvmgxN2fQ
+
 
 ### 게시물 검색 (검색어 x)
 GET http://localhost:8080/board/1/post/list
