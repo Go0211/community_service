@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.RegexRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @EnableWebSecurity
 @Configuration
@@ -28,6 +30,8 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    RequestMatcher postMatcher = new RegexRequestMatcher("/board/.*/post/\\d+", null);
+
     http
         // CSRF 설정 Disable
         .csrf(AbstractHttpConfigurer::disable)
@@ -46,6 +50,7 @@ public class SecurityConfig {
         // 나머지는 모두 권한이 필요하다
         .authorizeHttpRequests(request -> request
             // h2는 배포 시 주석 or 삭제해야한다.
+            .requestMatchers(postMatcher).permitAll()
             .requestMatchers("/h2-console/**").permitAll()
             .requestMatchers("/login", "/join").permitAll()
             .requestMatchers("board/list").permitAll()

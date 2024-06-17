@@ -3,7 +3,7 @@ POST http://localhost:8080/join
 Content-Type: application/json
 
 {
- 	"email" : "1@10",
+ 	"email" : "1@1",
      "password" : "123",
      "name" : "123",
      "birthDate" : "9999.99.99",
